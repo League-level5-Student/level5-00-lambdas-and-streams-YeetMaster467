@@ -1,7 +1,9 @@
 package _05_Minesweeper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import processing.core.PApplet;
 
@@ -76,7 +78,14 @@ public class Minesweeper extends PApplet {
      *  noneMatch() // returns true if no items in the stream match the condition
      */
     boolean checkWin() {
-        return false;
+    	int notMined = (int) cells.stream().filter(cell -> !cell.mine).count();
+        int clicked = (int) cells.stream().filter(cell -> cell.revealed).count();
+    	
+    	if (clicked == notMined) {
+    		return true;
+    	} else {
+    		return false;
+    	}
     }
     
     /*
