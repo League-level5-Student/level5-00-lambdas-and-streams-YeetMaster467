@@ -65,7 +65,7 @@ public class Minesweeper extends PApplet {
      * *Note* This can be done using a for loop, but try to do it with Streams.
      */
     void revealAllCells() {
-        
+        cells.stream().forEach(c -> c.revealed = true);
     }
     
     /*
@@ -105,7 +105,15 @@ public class Minesweeper extends PApplet {
      *        - - - -
      */
     void revealCell(Cell cell) {
-        
+        if (!cell.mine) {
+        	if (cell.revealed) {
+        		return;
+        	}
+        	cell.revealed = true;
+        	if (cell.minesAround == 0) {
+        		getNeighbors(cell).stream().forEach(c -> revealCell(c));
+        	}
+        }
     }
     
     /*
@@ -120,7 +128,15 @@ public class Minesweeper extends PApplet {
      * 6. Use reduce() or sum() to count the number of 1s, i.e. mines
      */
     void setNumberOfSurroundingMines() {
-        
+        cells.stream().forEach((c) -> {
+        	c.minesAround = getNeighbors(c).stream().mapToInt(s -> {
+        	if (s.mine) {
+        		return 1;
+        	} else {
+        		return 0;
+        	}
+        	}).sum();
+        });
     }
     
     @Override
